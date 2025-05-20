@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>メイン画面</title>
+		<link rel="stylesheet" th:href="@{/css/index.css}" />
+	</head>
+	<body>
+	
+	    <div class="spinner-overlay" id="spinner">
+	        <div class="spinner"></div>
+	        <div class="loading-text">入力されたメールアドレスに認証コードを送信しています。</div>
+	    </div>
+	
+	    <div class="container">
+	        <h1>Send Mail Sample</h1>
+			<hr>
+	
+	        <form th:action="@{/sendMail}" method="post" onsubmit="showSpinner()" th:object="${mailForm}">
+	            <p>メールアドレス入力</p>
+	            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></div>
+	            <input type="email" id="email" name="email" th:value="*{email}" required><br>
+	
+	            <input type="submit" value="送信" class="button">
+	        </form>
+	    </div>
+	
+	    <script>
+	        function showSpinner() {
+	            document.getElementById('spinner').style.display = 'flex';
+	        }
+	
+	        function hideSpinner() {
+	            document.getElementById('spinner').style.display = 'none';
+	        }
+	
+	        window.addEventListener('load', function () {
+	            hideSpinner();
+	        });
+	
+	        window.addEventListener('beforeunload', function () {
+	            showSpinner();
+	        });
+	    </script>
+	
+	</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+    href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Marcellus&display=swap"
+    rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="homepage">
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <section class="bg-white py-3">
+        <div class="section-header text-center">
+            <h3 class="section-title">Return Book</h3>
+        </div>
+        <div class="container mt-5">
+            <form th:action="@{/library/return}" method="POST">
+                <label for="bookIssueId">Book Issue ID:</label>
+                <input type="text" id="bookIssueId" name="bookIssueId" required><br><br>
+            
+                <button type="submit" class="btn btn-warning mx-2">Return Book</button>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- Display result message if any -->
+    <!-- <p th:text="${result}" style="color: green;"></p> -->
+
+    <!-- <form action="/library/return" method="post">
+        <div class="mb-3">
+            <label for="bookId" class="form-label">Book:</label>
+            <select name="bookId" class="form-select" required>
+                <option th:each="book : ${books}" th:value="${book.id}" th:text="${book.title}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="userId" class="form-label">User:</label>
+            <select name="userId" class="form-select" required>
+                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Return Book</button>
+    </form> -->
+
+    <!-- <form th:action="@{/library/return}" method="POST">
+        <label for="bookIssueId">Book Issue ID:</label>
+        <input type="text" id="bookIssueId" name="bookIssueId" required><br><br>
+    
+        <button type="submit">Return Book</button>
+    </form> -->
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

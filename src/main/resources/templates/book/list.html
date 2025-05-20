@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Library Management System</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+        <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+        href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Marcellus&display=swap"
+        rel="stylesheet">
+        <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body class="homepage">
+        <div th:if="${role != 'ADMIN' and role != 'USER'}">
+            <div th:replace="~{fragments/header :: header}"></div>
+        </div>
+        <section class="bg-white py-3">
+            <div class="section-header text-center">
+                <h3 class="section-title">Books List</h3>
+            </div>
+            <div class="container" style="height: 90%; overflow: scroll;">
+                <div th:if="${#lists.isEmpty(books)}">
+                    <div class="alert alert-info" role="alert">
+                        検索している本はありません！
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="/book/list" th:action="@{/book/list}" method="post" class="form-inline mb-3">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="px-3">Book Title</td>
+                                    <td class="px-3"><input type="text" class="form-control" id="title" name="title" th:value="${searchTitle}" placeholder="Search by title"></td>
+                                    
+                                    <td class="px-3">Book Author</td>
+                                    <td class="px-3"><input type="text" class="form-control" id="author" name="author" th:value="${searchAuthor}" placeholder="Search by author"></td>
+                                    
+                                    <td class="px-3">Genre</td>
+                                    <td class="px-3">
+                                        <select id="genre" name="genre" class="form-control">
+                                            <option value="">---Select---</option>
+                                            <th:block th:each="genre : ${genres}">
+                                                <option th:value="${genre}" th:text="${genre}" 
+                                                        th:selected="${genre == searchGenre}"></option>
+                                            </th:block>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <label for="available">Available:</label>
+                                            <input type="checkbox" id="available" name="available" th:checked="${searchAvailable}"/>
+                                        </div>
+                                    </td>
+                                    <td class="px-3">
+                                        <button type="submit" class="btn btn-primary ml-2">Search</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <div th:if="${not #lists.isEmpty(books)}">
+                    <table class="table table-bordered table-striped table-hover lcolor">
+                        <thead>
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center align-middle">
+                                    <a th:href="@{/book/list(sortField='title', sortDir=${sortField == 'title' ? reverseSortDir : 'asc'})}">
+                                        TITLE
+                                        <span>
+                                            <span th:text="${sortField == 'title' ? (sortDir == 'asc' ? '▲' : '▼') : '▲'}"></span>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th class="text-center align-middle">
+                                    <a th:href="@{/book/list(sortField='author', sortDir=${sortField == 'author' ? reverseSortDir : 'asc'})}">
+                                        AUTHOR
+                                        <span>
+                                            <span th:text="${sortField == 'author' ? (sortDir == 'asc' ? '▲' : '▼') : '▲'}"></span>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th class="text-center">ISBN</th>
+                                <th class="text-center align-middle">
+                                    <a th:href="@{/book/list(sortField='genre', sortDir=${sortField == 'genre' ? reverseSortDir : 'asc'})}">
+                                        GENRE
+                                        <span>
+                                            <span th:text="${sortField == 'genre' ? (sortDir == 'asc' ? '▲' : '▼') : '▲'}"></span>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th class="text-center align-middle">
+                                    <a th:href="@{/book/list(sortField='quantity', sortDir=${sortField == 'quantity' ? reverseSortDir : 'asc'})}">
+                                        QUANTITY
+                                        <span>
+                                            <span th:text="${sortField == 'quantity' ? (sortDir == 'asc' ? '▲' : '▼') : '▲'}"></span>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th class="text-center">PUBLISH YEAR</th>
+                                <th class="text-center align-middle">
+                                    <a th:href="@{/book/list(sortField='available', sortDir=${sortField == 'available' ? reverseSortDir : 'asc'})}">
+                                        AVARIALBE
+                                        <span>
+                                            <span th:text="${sortField == 'available' ? (sortDir == 'asc' ? '▲' : '▼') : '▲'}"></span>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th class="text-center">IMAGE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="book, stat : ${books}">
+                                <td class="text-center" th:text="${stat.index + 1}"></td>
+                                <td th:text="${book.title}"></td>
+                                <td class="text-center" th:text="${book.author}"></td>
+                                <td class="text-center" th:text="${book.isbn}"></td>
+                                <td class="text-center" th:text="${book.genre}"></td>
+                                <td class="text-center" th:text="${book.quantity}"></td>
+                                <td class="text-center" th:text="${book.published}"></td>
+                                <td class="text-center" th:text="${book.available ? 'Yes' : 'No'}"></td>
+                                <td>
+                                    <img th:src="${book.imagePath != null ? book.imagePath : '/img/no-image.svg'}"
+                                    th:alt="${book.imageName}" width="80" height="80">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <div th:replace="~{fragments/footer :: footer}"></div>
+    </body>
+</html>
